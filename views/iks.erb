@@ -1,0 +1,240 @@
+<%def money(num)
+  "$#{num.gsub(/\d(?=(...)+$)/, '\0,')}"
+end
+%>
+<p>Vamos a dimensionar un clúster de IKS</p>
+
+<p>
+<form action="/menu" method="get">
+<button type="submit"> <-- Regresar </button>
+</form>
+</p>
+<p style="font-style: italic;">
+NOTAS:<br>
+*Los precios lista que se presentarán son calculados y pueden variar respecto a los presentados en IBM Cloud en +-1%<br>
+m<br>
+</p>
+
+<form action="/iks-respuesta" method="get">
+
+<table style="width:100%" align="left">
+  <tr>
+    <th bgcolor="#00008B" style="color: white; width:50%" >Parámetros Clúster</th>
+  </tr>
+  <tr>
+    <td>
+        <!-- tabla parametros del clúster -->
+        <table style="width:100%" align="left">
+          <tr>
+            <th bgcolor="#00008B" style="color: white;">Parámetro</th>
+            <th bgcolor="#00008B" style="color: white;">Valor</th>
+            <th bgcolor="#00008B" style="color: white;">Milicores a CPU</th>
+          </tr>
+          <tr>
+            <td>CPU</td>
+            <td>
+              <label for="cpu"><input type="number" id="cpu" name="cpu">
+            </td>
+            <td> Ingresa la cantidad de milicores:
+          </tr>
+          <tr>
+            <td>RAM (GB)</td>
+            <td>
+              <label for="RAM (GB)"><input type="number" id="ram" name="ram">
+            </td>
+            <td>
+              <input type="number" id="milicpu" name="milicpu">
+              <button type="button" id="btn_calcular">Calcular</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Tipo de infraestructura</td>
+            <td>
+              <select name="infra_type" id="infra_type">
+                <option value="dedicated">Dedicado</option>
+                <option value="shared">Compartido</option>
+              </select>
+            </td>
+            <td>
+              Resultado: 
+              <input type="number" id="rescpu" name="rescpu" disabled>
+            </td>
+          </tr>
+          <tr>
+            <td>Región</td>
+            <td>
+              <select name="region" id="region">
+                <option value="mexico">México</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+
+
+    </td>
+  </tr>
+
+</table>
+<p>
+<button type="submit">Quiero mi dimensionamiento</button>
+</p>
+
+</form>
+
+<form action="/iks-precio" method="get">
+
+<table style="width:100%" align="left">
+  <tr>
+    <th bgcolor="#00008B" style="color: white; width:50%" >Parámetros Clúster con Worker Nodes</th>
+  </tr>
+  <tr>
+    <td>
+        <!-- tabla parametros del clúster -->
+        <table style="width:100%" align="left">
+          <tr>
+            <th bgcolor="#00008B" style="color: white;">Parámetro</th>
+            <th bgcolor="#00008B" style="color: white;">Valor</th>
+          </tr>
+          <tr>
+            <td>Worker Nodes</td>
+            <td>
+              <label for="wn"><input type="number" id="wn" name="wn">
+            </td>
+          </tr>
+          <tr>
+            <td>Tipo de infraestructura</td>
+            <td>
+              <select name="infra_type_wn" id="infra_type_wn">
+                <option value="dedicated">Dedicado</option>
+                <option value="shared">Compartido</option>
+                <option value="bm">BM</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Flavor</td>
+            <td>
+              <select name="flavor_wn" id="flavor_wn">
+                
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Región</td>
+            <td>
+              <select name="region" id="region">
+                <option value="mexico">México</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+
+
+    </td>
+  </tr>
+
+</table>
+<p>
+<button type="submit">Quiero mi dimensionamiento</button>
+</p>
+
+</form>
+
+
+
+<!--%=respuestaprecio%-->
+<% if (respuestaprecio != nil and respuestaprecio.size>0) then%>
+<h3>Dimensionamiento Clúster con Worker Nodes</h3>
+  <table  style="width:100%" align="left">
+    <thead>
+      <tr>
+        <th bgcolor="#00008B" style="color: white;">Flavor</th>
+        <th bgcolor="#00008B" style="color: white;">Tipo de Infraestructura</th>
+        <th bgcolor="#00008B" style="color: white;">Workers</th>
+        <th bgcolor="#00008B" style="color: white;">Precio</th>
+        <th bgcolor="#00008B" style="color: white;">Región</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% respuestaprecio.each do |json| %>
+        <tr>
+          <td><%= json["flavor"].to_s %></td>
+          <td><%= json["infra_type"].to_s %></td>
+          <td><%= json["workers"].to_s %></td>
+          <td><%= json["precio"].to_s %></td>
+          <td><%= json["region"].to_s %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<!--%=respuestasizing%-->
+<% if (respuestasizing != nil and respuestasizing.size>0) then%>
+<h3>Dimensionamiento Clúster más económico</h3>
+  <table  style="width:100%" align="left">
+    <thead>
+      <tr>
+        <th bgcolor="#00008B" style="color: white;">Flavor</th>
+        <th bgcolor="#00008B" style="color: white;">Tipo de Infraestructura</th>
+        <th bgcolor="#00008B" style="color: white;">Workers</th>
+        <th bgcolor="#00008B" style="color: white;">Precio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% respuestasizing.each do |json| %>
+        <tr>
+          <td><%= json["flavor"].to_s %></td>
+          <td><%= json["infra_type"].to_s %></td>
+          <td><%= json["workers"].to_s %></td>
+          <td><div class="myDIV"><%= json["precio"].to_s %></div></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<!--%=respuestasizingalt%-->
+<% if (respuestasizingalt != nil and respuestasizingalt.size>0) then%>
+<h3>Alternativas del Dimensionamiento Clúster</h3>
+  <table  style="width:100%" align="left">
+    <thead>
+      <tr>
+        <th bgcolor="#00008B" style="color: white;">Flavor</th>
+        <th bgcolor="#00008B" style="color: white;">Tipo de Infraestructura</th>
+        <th bgcolor="#00008B" style="color: white;">Workers</th>
+        <th bgcolor="#00008B" style="color: white;">Precio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% respuestasizingalt.each do |json| %>
+        <tr>
+          <td><%= json["flavor"].to_s %></td>
+          <td><%= json["infra_type"].to_s %></td>
+          <td><%= json["workers"].to_s %></td>
+          <td><%= json["precio"].to_s %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<script>
+  $(document).ready(function () {
+    $("#infra_type_wn").change(function () {
+        var val = $(this).val();
+        alert (val);
+        if (val == "shared" || val == "dedicated") {
+            $("#flavor_wn").html("<option value='2x4'>2x4</option> <option value='4x16'>4x16</option> <option value='4x32'>4x32</option> <option value='8x32'>8x32</option> <option value='16x16'>16x16</option> <option value='16x32'>16x32</option> <option value='16x64'>16x64</option> <option value='32x32'>32x32</option> <option value='32x64'>32x64</option> <option value='32x128'>32x128</option> <option value='32x128'>32x128</option>");
+        } else {
+            $("#flavor_wn").html("<option value='mb4c.20x192'>mb4c.20x192</option> <option value='mb4c.20x384'>mb4c.20x384</option> <option value='mb4c.20x64'>mb4c.20x64</option> <option value='mb4c.20x64.2x1.9tb.ssd'>mb4c.20x64.2x1.9tb.ssd</option> <option value='mb4c.32x384.3.8tb.ssd'>mb4c.32x384.3.8tb.ssd</option> <option value='mb4c.32x384.6x3.8tb.ssd'>mb4c.32x384.6x3.8tb.ssd</option> <option value='mb4c.32x768.3.8tb.ssd'>mb4c.32x768.3.8tb.ssd</option>");
+        }
+    });
+
+    $("#btn_calcular").click(function(){
+      var num = $("#milicpu").val();
+      var res = num/1000;
+      $("#rescpu").val(res);
+    });
+});
+</script>
