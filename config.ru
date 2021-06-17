@@ -1,3 +1,3 @@
 # config.ru
-require './basic'
+require './app'
 run Sinatra::Application
