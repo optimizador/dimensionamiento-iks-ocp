@@ -33,14 +33,14 @@ m<br>
           <tr>
             <td>CPU</td>
             <td>
-              <label for="cpu"><input type="number" id="cpu" name="cpu">
+              <label for="cpu"><input type="number" id="cpu" name="cpu" required>
             </td>
             <td> Ingresa la cantidad de milicores:
           </tr>
           <tr>
             <td>RAM (GB)</td>
             <td>
-              <label for="RAM (GB)"><input type="number" id="ram" name="ram">
+              <label for="RAM (GB)"><input type="number" id="ram" name="ram" required>
             </td>
             <td>
               <input type="number" id="milicpu" name="milicpu">
@@ -134,6 +134,7 @@ m<br>
       var num = $("#milicpu").val();
       var res = num/1000;
       $("#rescpu").val(res);
+      $("#cpu").val(res);
     });
 });
 </script>

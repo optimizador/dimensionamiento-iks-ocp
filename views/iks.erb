@@ -33,14 +33,14 @@ m<br>
           <tr>
             <td>CPU</td>
             <td>
-              <label for="cpu"><input type="number" id="cpu" name="cpu">
+              <label for="cpu"><input type="number" id="cpu" name="cpu" required>
             </td>
             <td> Ingresa la cantidad de milicores:
           </tr>
           <tr>
             <td>RAM (GB)</td>
             <td>
-              <label for="RAM (GB)"><input type="number" id="ram" name="ram">
+              <label for="RAM (GB)"><input type="number" id="ram" name="ram" required>
             </td>
             <td>
               <input type="number" id="milicpu" name="milicpu">
@@ -50,7 +50,7 @@ m<br>
           <tr>
             <td>Tipo de infraestructura</td>
             <td>
-              <select name="infra_type" id="infra_type">
+              <select name="infra_type" id="infra_type" required>
                 <option value="dedicated">Dedicado</option>
                 <option value="shared">Compartido</option>
               </select>
@@ -63,7 +63,7 @@ m<br>
           <tr>
             <td>Región</td>
             <td>
-              <select name="region" id="region">
+              <select name="region" id="region" required>
                 <option value="mexico">México</option>
               </select>
             </td>
@@ -235,6 +235,7 @@ m<br>
       var num = $("#milicpu").val();
       var res = num/1000;
       $("#rescpu").val(res);
+      $("#cpu").val(res);
     });
 });
 </script>
