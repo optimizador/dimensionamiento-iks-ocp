@@ -50,7 +50,7 @@ get '/iks-precio' do
   infra_type="#{params['infra_type_wn']}"
   region="#{params['region']}"
   logger = Logger.new(STDOUT)
-  logger.info("Recibiendo parametros para dimensionamiento de IKS con Worker Nodes: Worker Nodes: #{wn} Flavor: #{flavor} Infra_Type: #{infra_type} Region #{region}")
+  logger.info("Recibiendo parametros para dimensionamiento de IKS con Worker Nodes: Worker Nodes: #{wn} Flavor: #{flavor} Infra_Type: #{infra_type} Region: #{region}")
   @name = "CP4D-Dimensionamiento"
   urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud"
   
@@ -71,27 +71,53 @@ get '/ocp' do
   @name = "OCP"
   respuestasizing=[]
   respuestasizingalt=[]
+  respuestaprecio=[]
   response.set_cookie("llave", value: "valor")
-  erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt}
+  erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt, :respuestaprecio => respuestaprecio}
 end
 
 get '/ocp-respuesta' do
   cpu="#{params['cpu']}"
   ram="#{params['ram']}"
+  infra_type="#{params['infra_type']}"
+  region="#{params['region']}"
   logger = Logger.new(STDOUT)
-  logger.info("Recibiendo parametros para dimensionamiento de OCP: CPU: #{cpu} RAM: #{ram}")
+  logger.info("Recibiendo parametros para dimensionamiento de OCP: CPU: #{cpu} RAM: #{ram} Infra_Type: #{infra_type} Region: #{region}")
   @name = "OCP-Dimensionamiento"
-  urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud"
+  urlapi="localhost:8080"
   
   #parametros recibidos
-  respuestasizing = RestClient.get "#{urlapi}/api/v1/sizingclusteroptimo?cpu=#{cpu}&ram=#{ram}", {:params => {}}
+  respuestasizing = RestClient.get "#{urlapi}/api/v2/sizingclusteroptimo?cpu=#{cpu}&ram=#{ram}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
   respuestasizing=JSON.parse(respuestasizing.to_s)
   logger.info(respuestasizing)
-  respuestasizingalt = RestClient.get "#{urlapi}/api/v1/sizingcluster?cpu=#{cpu}&ram=#{ram}", {:params => {}}
+  respuestasizingalt = RestClient.get "#{urlapi}/api/v2/sizingcluster?cpu=#{cpu}&ram=#{ram}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
   respuestasizingalt=JSON.parse(respuestasizingalt.to_s)
   logger.info(respuestasizingalt)
 
+  respuestaprecio=[]
+
   #erb :cp4d , :locals => {:respuestasizing => params[:respuestasizing]}
-  erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt}
+  erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt, :respuestaprecio => respuestaprecio}
+end
+
+get '/ocp-precio' do
+  wn="#{params['wn']}"
+  flavor="#{params['flavor_wn']}"
+  infra_type="#{params['infra_type_wn']}"
+  region="#{params['region']}"
+  logger = Logger.new(STDOUT)
+  logger.info("Recibiendo parametros para dimensionamiento de IKS con Worker Nodes: Worker Nodes: #{wn} Flavor: #{flavor} Infra_Type: #{infra_type} Region #{region}")
+  @name = "CP4D-Dimensionamiento"
+  urlapi="localhost:8080"
+  
+  respuestaprecio = RestClient.get "#{urlapi}/api/v1/preciocluster?wn=#{wn}&flavor=#{flavor}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
+  respuestaprecio=JSON.parse(respuestaprecio.to_s)
+  logger.info(respuestaprecio)
+
+  respuestasizing=[]
+  respuestasizingalt=[]
+
+  #erb :cp4d , :locals => {:respuestasizing => params[:respuestasizing]}
+  erb :iks , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt,:respuestaprecio => respuestaprecio}
 end
 

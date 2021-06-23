@@ -139,8 +139,7 @@ m<br>
 </p>
 
 </form>
-
-
+<div class="mypanel"></div>
 
 <!--%=respuestaprecio%-->
 <% if (respuestaprecio != nil and respuestaprecio.size>0) then%>
@@ -161,7 +160,7 @@ m<br>
           <td><%= json["flavor"].to_s %></td>
           <td><%= json["infra_type"].to_s %></td>
           <td><%= json["workers"].to_s %></td>
-          <td><%= json["precio"].to_s %></td>
+          <td>$<%= json["precio"].to_s %> USD</td>
           <td><%= json["region"].to_s %></td>
         </tr>
       <% end %>
@@ -187,7 +186,7 @@ m<br>
           <td><%= json["flavor"].to_s %></td>
           <td><%= json["infra_type"].to_s %></td>
           <td><%= json["workers"].to_s %></td>
-          <td><div class="myDIV"><%= json["precio"].to_s %></div></td>
+          <td><div class="myDIV">$<%= json["precio"].to_s %> USD</div></td>
         </tr>
       <% end %>
     </tbody>
@@ -212,7 +211,7 @@ m<br>
           <td><%= json["flavor"].to_s %></td>
           <td><%= json["infra_type"].to_s %></td>
           <td><%= json["workers"].to_s %></td>
-          <td><%= json["precio"].to_s %></td>
+          <td>$<%= json["precio"].to_s %> USD</td>
         </tr>
       <% end %>
     </tbody>
@@ -221,9 +220,19 @@ m<br>
 
 <script>
   $(document).ready(function () {
+    //Obtener valores de flavors de base de datos
+    /*$.getJSON('http://time.jsontest.com', function(data) {
+        
+        var text = `Date: ${data.date}<br>
+                    Time: ${data.time}<br>
+                    Unix time: ${data.milliseconds_since_epoch}`
+                    
+        
+        $(".mypanel").html(text);
+    });*/
+    
     $("#infra_type_wn").change(function () {
         var val = $(this).val();
-        alert (val);
         if (val == "shared" || val == "dedicated") {
             $("#flavor_wn").html("<option value='2x4'>2x4</option> <option value='4x16'>4x16</option> <option value='4x32'>4x32</option> <option value='8x32'>8x32</option> <option value='16x16'>16x16</option> <option value='16x32'>16x32</option> <option value='16x64'>16x64</option> <option value='32x32'>32x32</option> <option value='32x64'>32x64</option> <option value='32x128'>32x128</option> <option value='32x128'>32x128</option>");
         } else {
