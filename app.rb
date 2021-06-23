@@ -84,7 +84,7 @@ get '/ocp-respuesta' do
   logger = Logger.new(STDOUT)
   logger.info("Recibiendo parametros para dimensionamiento de OCP: CPU: #{cpu} RAM: #{ram} Infra_Type: #{infra_type} Region: #{region}")
   @name = "OCP-Dimensionamiento"
-  urlapi="localhost:8080"
+  urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud/"
   
   #parametros recibidos
   respuestasizing = RestClient.get "#{urlapi}/api/v2/sizingclusteroptimo?cpu=#{cpu}&ram=#{ram}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
@@ -108,7 +108,7 @@ get '/ocp-precio' do
   logger = Logger.new(STDOUT)
   logger.info("Recibiendo parametros para dimensionamiento de IKS con Worker Nodes: Worker Nodes: #{wn} Flavor: #{flavor} Infra_Type: #{infra_type} Region #{region}")
   @name = "CP4D-Dimensionamiento"
-  urlapi="localhost:8080"
+  urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud/"
   
   respuestaprecio = RestClient.get "#{urlapi}/api/v1/preciocluster?wn=#{wn}&flavor=#{flavor}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
   respuestaprecio=JSON.parse(respuestaprecio.to_s)
