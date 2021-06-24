@@ -5,7 +5,7 @@ end
 <p>Vamos a dimensionar un clúster de OCP</p>
 
 <p>
-<form action="/menu" method="get">
+<form id="form_cluster" action="/menu" method="get">
 <button type="submit"> <-- Regresar </button>
 </form>
 </p>
@@ -53,6 +53,7 @@ m<br>
               <select name="infra_type" id="infra_type" required>
                 <option value="dedicated">Dedicado</option>
                 <option value="shared">Compartido</option>
+                <option value="bm">Bare Metal</option>
               </select>
             </td>
             <td>
@@ -105,7 +106,7 @@ m<br>
               <select name="infra_type_wn" id="infra_type_wn">
                 <option value="dedicated">Dedicado</option>
                 <option value="shared">Compartido</option>
-                <option value="bm">BM</option>
+                <option value="bm">Bare Metal</option>
               </select>
             </td>
           </tr>
@@ -144,7 +145,7 @@ m<br>
         <th bgcolor="#00008B" style="color: white;">Flavor</th>
         <th bgcolor="#00008B" style="color: white;">Tipo de Infraestructura</th>
         <th bgcolor="#00008B" style="color: white;">Workers</th>
-        <th bgcolor="#00008B" style="color: white;">Precio</th>
+        <th bgcolor="#00008B" style="color: white;">Precio Mensual (USD) con Subscripción OCP</th>
         <th bgcolor="#00008B" style="color: white;">Región</th>
       </tr>
     </thead>
@@ -154,7 +155,7 @@ m<br>
           <td><%= json["flavor"].to_s %></td>
           <td><%= json["infra_type"].to_s %></td>
           <td><%= json["workers"].to_s %></td>
-          <td>$<%= json["precio"].to_s %> USD</td>
+          <td>$<%= json["precio_subs"].to_s %> USD</td>
           <td><%= json["region"].to_s %></td>
         </tr>
       <% end %>
@@ -171,7 +172,7 @@ m<br>
         <th bgcolor="#00008B" style="color: white;">Flavor</th>
         <th bgcolor="#00008B" style="color: white;">Tipo de Infraestructura</th>
         <th bgcolor="#00008B" style="color: white;">Workers</th>
-        <th bgcolor="#00008B" style="color: white;">Precio</th>
+        <th bgcolor="#00008B" style="color: white;">Precio Mensual (USD) con Subscripción OCP</th>
       </tr>
     </thead>
     <tbody>
@@ -180,7 +181,7 @@ m<br>
           <td><%= json["flavor"].to_s %></td>
           <td><%= json["infra_type"].to_s %></td>
           <td><%= json["workers"].to_s %></td>
-          <td><div class="myDIV">$<%= json["precio"].to_s %> USD</div></td>
+          <td><div class="myDIV">$<%= json["precio_subs"].to_s %> USD</div></td>
         </tr>
       <% end %>
     </tbody>
@@ -196,7 +197,7 @@ m<br>
         <th bgcolor="#00008B" style="color: white;">Flavor</th>
         <th bgcolor="#00008B" style="color: white;">Tipo de Infraestructura</th>
         <th bgcolor="#00008B" style="color: white;">Workers</th>
-        <th bgcolor="#00008B" style="color: white;">Precio</th>
+        <th bgcolor="#00008B" style="color: white;">Precio Mensual (USD) con Subscripción OCP</th>
       </tr>
     </thead>
     <tbody>
@@ -205,7 +206,7 @@ m<br>
           <td><%= json["flavor"].to_s %></td>
           <td><%= json["infra_type"].to_s %></td>
           <td><%= json["workers"].to_s %></td>
-          <td>$<%= json["precio"].to_s %> USD</td>
+          <td>$<%= json["precio_subs"].to_s %> USD</td>
         </tr>
       <% end %>
     </tbody>
@@ -229,5 +230,16 @@ m<br>
       $("#rescpu").val(res);
       $("#cpu").val(res);
     });
+
+    /*$('#form_cluster').on("submit", function(e){
+      e.preventDefault();
+      var self = $(this);
+      var ram = $('#ram').val();
+      alert(ram.tostring());
+      $('#ram').val(ram + 8);
+      alert($('#ram').val());
+      $('#form_cluster').off("submit");
+      self.submit();
+    });*/
 });
 </script>

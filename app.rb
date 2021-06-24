@@ -118,6 +118,6 @@ get '/ocp-precio' do
   respuestasizingalt=[]
 
   #erb :cp4d , :locals => {:respuestasizing => params[:respuestasizing]}
-  erb :iks , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt,:respuestaprecio => respuestaprecio}
+  erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt,:respuestaprecio => respuestaprecio}
 end
 
