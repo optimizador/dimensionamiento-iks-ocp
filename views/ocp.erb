@@ -213,6 +213,13 @@ m<br>
   </table>
 <% end %>
 
+<!--%=apirespuesta%-->
+<% if (apirespuesta == true) then%>
+    <script>
+      alert("La configuración de cpu y ram es incorrecta, requiere un mínimo de 4 CPU y 15 GB de RAM")
+    </script>
+<% end %>
+
 <script>
   $(document).ready(function () {
     $("#infra_type_wn").change(function () {

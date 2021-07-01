@@ -72,12 +72,14 @@ get '/ocp' do
   respuestasizing=[]
   respuestasizingalt=[]
   respuestaprecio=[]
+  apirespuesta=false
   response.set_cookie("llave", value: "valor")
-  erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt, :respuestaprecio => respuestaprecio}
+  erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt, :respuestaprecio => respuestaprecio, :apirespuesta => apirespuesta}
 end
 
 get '/ocp-respuesta' do
-  cpu="#{params['cpu']}"
+  cpu_aux="#{params['cpu']}".to_i
+  cpu = cpu_aux + 2
   ram_aux="#{params['ram']}".to_i
   ram = ram_aux + 8
   infra_type="#{params['infra_type']}"
@@ -85,8 +87,8 @@ get '/ocp-respuesta' do
   logger = Logger.new(STDOUT)
   logger.info("Recibiendo parametros para dimensionamiento de OCP: CPU: #{cpu} RAM: #{ram} Infra_Type: #{infra_type} Region: #{region}")
   @name = "OCP-Dimensionamiento"
-  urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud/"
-  #urlapi="localhost:8080/"
+  #urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud/"
+  urlapi="localhost:8080/"
   
   #parametros recibidos
   respuestasizing = RestClient.get "#{urlapi}/api/v2/sizingclusteroptimo?cpu=#{cpu}&ram=#{ram}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
@@ -96,10 +98,17 @@ get '/ocp-respuesta' do
   respuestasizingalt=JSON.parse(respuestasizingalt.to_s)
   logger.info(respuestasizingalt)
 
+  if(respuestasizing.empty? || respuestasizingalt.empty?)
+    apirespuesta = true;
+  else 
+    apirespuesta = false;
+  end
+
   respuestaprecio=[]
+  
 
   #erb :cp4d , :locals => {:respuestasizing => params[:respuestasizing]}
-  erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt, :respuestaprecio => respuestaprecio}
+  erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt, :respuestaprecio => respuestaprecio, :apirespuesta => apirespuesta}
 end
 
 get '/ocp-precio' do
@@ -110,17 +119,23 @@ get '/ocp-precio' do
   logger = Logger.new(STDOUT)
   logger.info("Recibiendo parametros para dimensionamiento de IKS con Worker Nodes: Worker Nodes: #{wn} Flavor: #{flavor} Infra_Type: #{infra_type} Region #{region}")
   @name = "CP4D-Dimensionamiento"
-  urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud/"
-  #urlapi="localhost:8080/"
+  #urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud/"
+  urlapi="localhost:8080/"
   
   respuestaprecio = RestClient.get "#{urlapi}/api/v1/preciocluster?wn=#{wn}&flavor=#{flavor}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
   respuestaprecio=JSON.parse(respuestaprecio.to_s)
   logger.info(respuestaprecio)
 
+  if respuestaprecio.empty?
+    apirespuesta = true;
+  else 
+    apirespuesta = false;
+  end
+
   respuestasizing=[]
   respuestasizingalt=[]
 
   #erb :cp4d , :locals => {:respuestasizing => params[:respuestasizing]}
-  erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt,:respuestaprecio => respuestaprecio}
+  erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt,:respuestaprecio => respuestaprecio, :apirespuesta => apirespuesta}
 end
 
