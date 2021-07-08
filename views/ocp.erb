@@ -2,216 +2,254 @@
   "$#{num.gsub(/\d(?=(...)+$)/, '\0,')}"
 end
 %>
-<p>Vamos a dimensionar un clúster de OCP</p>
 
-<p>
-<form id="form_cluster" action="/menu" method="get">
-<button type="submit"> <-- Regresar </button>
-</form>
-</p>
-<p style="font-style: italic;">
-NOTAS:<br>
-*Los precios lista que se presentarán son calculados y pueden variar respecto a los presentados en IBM Cloud en +-1%<br>
-m<br>
-</p>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Parámetros clúster OCP</h5>
+        </div>
+        <div class="ibox-content">
+          <h5>NOTAS:*Los precios lista que se presentarán son calculados y pueden variar respecto a los presentados en IBM Cloud en +-1%</h5>
+          <form action="/ocp-respuesta" method="get">
+            <table class="table table-stripped">
+              <thead>
+                <tr>
+                  <th>Parámetro</th>
+                  <th>Valor</th>
+                  <th>Milicores a CPU</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>CPU</td>
+                  <td>
+                    <label for="cpu"><input type="number" id="cpu" name="cpu" required>
+                  </td>
+                  <td> Ingresa la cantidad de milicores:
+                </tr>
+                <tr>
+                  <td>RAM (GB)</td>
+                  <td>
+                    <label for="RAM (GB)"><input type="number" id="ram" name="ram" required>
+                  </td>
+                  <td>
+                    <input type="number" id="milicpu" name="milicpu">
+                    <button type="button" id="btn_calcular" class="btn btn-outline btn-primary">Calcular</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tipo de infraestructura</td>
+                  <td>
+                    <select name="infra_type" id="infra_type" required>
+                      <option value="dedicated">Dedicado</option>
+                      <option value="shared">Compartido</option>
+                      <option value="bm">Bare Metal</option>
+                    </select>
+                  </td>
+                  <td>
+                    Resultado: 
+                    <input type="number" id="rescpu" name="rescpu" disabled>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Región</td>
+                  <td>
+                    <select name="region" id="region" required>
+                      <option value="mexico">México</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button type="submit" class="btn btn-outline btn-primary">Quiero mi dimensionamiento</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-<form action="/ocp-respuesta" method="get">
-
-<table style="width:100%" align="left">
-  <tr>
-    <th bgcolor="#00008B" style="color: white; width:50%" >Parámetros Clúster</th>
-  </tr>
-  <tr>
-    <td>
-        <!-- tabla parametros del clúster -->
-        <table style="width:100%" align="left">
-          <tr>
-            <th bgcolor="#00008B" style="color: white;">Parámetro</th>
-            <th bgcolor="#00008B" style="color: white;">Valor</th>
-            <th bgcolor="#00008B" style="color: white;">Milicores a CPU</th>
-          </tr>
-          <tr>
-            <td>CPU</td>
-            <td>
-              <label for="cpu"><input type="number" id="cpu" name="cpu" required>
-            </td>
-            <td> Ingresa la cantidad de milicores:
-          </tr>
-          <tr>
-            <td>RAM (GB)</td>
-            <td>
-              <label for="RAM (GB)"><input type="number" id="ram" name="ram" required>
-            </td>
-            <td>
-              <input type="number" id="milicpu" name="milicpu">
-              <button type="button" id="btn_calcular">Calcular</button>
-            </td>
-          </tr>
-          <tr>
-            <td>Tipo de infraestructura</td>
-            <td>
-              <select name="infra_type" id="infra_type" required>
-                <option value="dedicated">Dedicado</option>
-                <option value="shared">Compartido</option>
-                <option value="bm">Bare Metal</option>
-              </select>
-            </td>
-            <td>
-              Resultado: 
-              <input type="number" id="rescpu" name="rescpu" disabled>
-            </td>
-          </tr>
-          <tr>
-            <td>Región</td>
-            <td>
-              <select name="region" id="region" required>
-                <option value="mexico">México</option>
-              </select>
-            </td>
-          </tr>
-        </table>
-    </td>
-  </tr>
-
-</table>
-<p>
-<button type="submit">Quiero mi dimensionamiento</button>
-</p>
-
-</form>
-
-<form action="/ocp-precio" method="get">
-
-<table style="width:100%" align="left">
-  <tr>
-    <th bgcolor="#00008B" style="color: white; width:50%" >Parámetros Clúster con Worker Nodes</th>
-  </tr>
-  <tr>
-    <td>
-        <!-- tabla parametros del clúster -->
-        <table style="width:100%" align="left">
-          <tr>
-            <th bgcolor="#00008B" style="color: white;">Parámetro</th>
-            <th bgcolor="#00008B" style="color: white;">Valor</th>
-          </tr>
-          <tr>
-            <td>Worker Nodes</td>
-            <td>
-              <label for="wn"><input type="number" id="wn" name="wn">
-            </td>
-          </tr>
-          <tr>
-            <td>Tipo de infraestructura</td>
-            <td>
-              <select name="infra_type_wn" id="infra_type_wn">
-                <option value="dedicated">Dedicado</option>
-                <option value="shared">Compartido</option>
-                <option value="bm">Bare Metal</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>Flavor</td>
-            <td>
-              <select name="flavor_wn" id="flavor_wn">
-                
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>Región</td>
-            <td>
-              <select name="region" id="region">
-                <option value="mexico">México</option>
-              </select>
-            </td>
-          </tr>
-        </table>
-    </td>
-  </tr>
-</table>
-<p>
-<button type="submit">Quiero mi dimensionamiento</button>
-</p>
-
-</form>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Parámetros Clúster OCP con Worker Nodes</h5>
+        </div>
+        <div class="ibox-content">
+          <form action="/ocp-precio" method="get">
+            <table class="table table-stripped">
+              <thead>
+                <tr>
+                  <th>Parámetro</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Worker Nodes</td>
+                  <td>
+                    <label for="wn"><input type="number" id="wn" name="wn">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tipo de infraestructura</td>
+                  <td>
+                    <select name="infra_type_wn" id="infra_type_wn">
+                      <option value="dedicated">Dedicado</option>
+                      <option value="shared">Compartido</option>
+                      <option value="bm">Bare Metal</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Flavor</td>
+                  <td>
+                    <select name="flavor_wn" id="flavor_wn">
+                      
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Región</td>
+                  <td>
+                    <select name="region" id="region">
+                      <option value="mexico">México</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button type="submit" class="btn btn-outline btn-primary">Quiero mi dimensionamiento</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!--%=respuestaprecio%-->
 <% if (respuestaprecio != nil and respuestaprecio.size>0) then%>
-<h3>Dimensionamiento Clúster con Worker Nodes</h3>
-  <table  style="width:100%" align="left">
-    <thead>
-      <tr>
-        <th bgcolor="#00008B" style="color: white;">Flavor</th>
-        <th bgcolor="#00008B" style="color: white;">Tipo de Infraestructura</th>
-        <th bgcolor="#00008B" style="color: white;">Workers</th>
-        <th bgcolor="#00008B" style="color: white;">Precio Mensual (USD) con Subscripción OCP</th>
-        <th bgcolor="#00008B" style="color: white;">Región</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% respuestaprecio.each do |json| %>
-        <tr>
-          <td><%= json["flavor"].to_s %></td>
-          <td><%= json["infra_type"].to_s %></td>
-          <td><%= json["workers"].to_s %></td>
-          <td>$<%= json["precio"].to_s %> USD</td>
-          <td><%= json["region"].to_s %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Dimensionamiento Clúster con Worker Nodes</h5>
+        </div>
+        <div class="ibox-content">
+          <table class="table table-stripped">
+            <thead>
+              <tr>
+                <th>Flavor</th>
+                <th>Tipo de Infraestructura</th>
+                <th>Workers</th>
+                <th>Precio Mensual (USD) con Suscripción</th>
+                <th>Región</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% respuestaprecio.each do |json| %>
+                <tr>
+                  <td><%= json["flavor"].to_s %></td>
+                  <td><%= json["infra_type"].to_s %></td>
+                  <td><%= json["workers"].to_s %></td>
+                  <td>$<%= json["precio"].to_s %> USD</td>
+                  <td><%= json["region"].to_s %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <% end %>
 
 <!--%=respuestasizing%-->
 <% if (respuestasizing != nil and respuestasizing.size>0) then%>
-<h3>Dimensionamiento Clúster más económico</h3>
-  <table  style="width:100%" align="left">
-    <thead>
-      <tr>
-        <th bgcolor="#00008B" style="color: white;">Flavor</th>
-        <th bgcolor="#00008B" style="color: white;">Tipo de Infraestructura</th>
-        <th bgcolor="#00008B" style="color: white;">Workers</th>
-        <th bgcolor="#00008B" style="color: white;">Precio Mensual (USD) con Subscripción OCP</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% respuestasizing.each do |json| %>
-        <tr>
-          <td><%= json["flavor"].to_s %></td>
-          <td><%= json["infra_type"].to_s %></td>
-          <td><%= json["workers"].to_s %></td>
-          <td><div class="myDIV">$<%= json["precio_subs"].to_s %> USD</div></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Dimensionamiento Clúster más económico</h5>
+        </div>
+        <div class="ibox-content">
+          <table class="table table-stripped">
+            <thead>
+              <tr>
+                <th>Flavor</th>
+                <th>Tipo de Infraestructura</th>
+                <th>Workers</th>
+                <th>Precio Mensual (USD) con Suscripción OCP</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% respuestasizing.each do |json| %>
+                <tr>
+                  <td><%= json["flavor"].to_s %></td>
+                  <td><%= json["infra_type"].to_s %></td>
+                  <td><%= json["workers"].to_s %></td>
+                  <td><div class="myDIV">$<%= json["precio"].to_s %> USD</div></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <% end %>
 
 <!--%=respuestasizingalt%-->
 <% if (respuestasizingalt != nil and respuestasizingalt.size>0) then%>
-<h3>Alternativas del Dimensionamiento Clúster</h3>
-  <table  style="width:100%" align="left">
-    <thead>
-      <tr>
-        <th bgcolor="#00008B" style="color: white;">Flavor</th>
-        <th bgcolor="#00008B" style="color: white;">Tipo de Infraestructura</th>
-        <th bgcolor="#00008B" style="color: white;">Workers</th>
-        <th bgcolor="#00008B" style="color: white;">Precio Mensual (USD) con Subscripción OCP</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% respuestasizingalt.each do |json| %>
-        <tr>
-          <td><%= json["flavor"].to_s %></td>
-          <td><%= json["infra_type"].to_s %></td>
-          <td><%= json["workers"].to_s %></td>
-          <td>$<%= json["precio_subs"].to_s %> USD</td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Alternativas del Dimensionamiento Clúster</h5>
+        </div>
+        <div class="ibox-content">
+          <table class="table table-stripped">
+            <thead>
+              <tr>
+                <th>Flavor</th>
+                <th>Tipo de Infraestructura</th>
+                <th>Workers</th>
+                <th>Precio Mensual (USD)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% respuestasizingalt.each do |json| %>
+                <tr>
+                  <td><%= json["flavor"].to_s %></td>
+                  <td><%= json["infra_type"].to_s %></td>
+                  <td><%= json["workers"].to_s %></td>
+                  <td>$<%= json["precio"].to_s %> USD</td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <% end %>
+
+<div class="row">
+  <div class="col-12 text-center">
+    <form action="/menu" method="get">
+      <button type="submit" class="btn btn-outline btn-primary">Regresar</button>
+    </form>
+  </div>
+</div>
 
 <!--%=apirespuesta%-->
 <% if (apirespuesta == true) then%>
@@ -237,16 +275,5 @@ m<br>
       $("#rescpu").val(res);
       $("#cpu").val(res);
     });
-
-    /*$('#form_cluster').on("submit", function(e){
-      e.preventDefault();
-      var self = $(this);
-      var ram = $('#ram').val();
-      alert(ram.tostring());
-      $('#ram').val(ram + 8);
-      alert($('#ram').val());
-      $('#form_cluster').off("submit");
-      self.submit();
-    });*/
 });
 </script>
