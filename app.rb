@@ -99,9 +99,9 @@ get '/ocp-respuesta' do
   logger.info(respuestasizingalt)
 
   if(respuestasizing.empty? || respuestasizingalt.empty?)
-    apirespuesta = true;
+    apirespuesta = true
   else 
-    apirespuesta = false;
+    apirespuesta = false
   end
 
   respuestaprecio=[]
@@ -127,9 +127,9 @@ get '/ocp-precio' do
   logger.info(respuestaprecio)
 
   if respuestaprecio.empty?
-    apirespuesta = true;
+    apirespuesta = true
   else 
-    apirespuesta = false;
+    apirespuesta = false
   end
 
   respuestasizing=[]
