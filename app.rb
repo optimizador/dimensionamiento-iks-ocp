@@ -78,10 +78,8 @@ get '/ocp' do
 end
 
 get '/ocp-respuesta' do
-  cpu_aux="#{params['cpu']}".to_i
-  cpu = cpu_aux + 2
-  ram_aux="#{params['ram']}".to_i
-  ram = ram_aux + 8
+  cpu="#{params['cpu']}"
+  ram="#{params['ram']}"
   infra_type="#{params['infra_type']}"
   region="#{params['region']}"
   logger = Logger.new(STDOUT)
