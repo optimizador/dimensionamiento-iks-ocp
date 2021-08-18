@@ -89,10 +89,10 @@ get '/ocp-respuesta' do
   #urlapi="localhost:8080/"
   
   #parametros recibidos
-  respuestasizing = RestClient.get "#{urlapi}/api/v2/sizingclusteroptimo?cpu=#{cpu}&ram=#{ram}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
+  respuestasizing = RestClient.get "#{urlapi}/api/v2/sizingclusteroptimosubs?cpu=#{cpu}&ram=#{ram}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
   respuestasizing=JSON.parse(respuestasizing.to_s)
   logger.info(respuestasizing)
-  respuestasizingalt = RestClient.get "#{urlapi}/api/v2/sizingcluster?cpu=#{cpu}&ram=#{ram}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
+  respuestasizingalt = RestClient.get "#{urlapi}/api/v2/sizingclustersubs?cpu=#{cpu}&ram=#{ram}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
   respuestasizingalt=JSON.parse(respuestasizingalt.to_s)
   logger.info(respuestasizingalt)
 
