@@ -146,7 +146,8 @@ end
                 <th>Flavor</th>
                 <th>Tipo de Infraestructura</th>
                 <th>Workers</th>
-                <th>Precio Mensual (USD) con Suscripción</th>
+                <th>Precio Mensual (USD) con Subscripción OCP</th>
+                <th>Precio Mensual (USD) sin Subscripción OCP</th>
                 <th>Región</th>
               </tr>
             </thead>
@@ -156,6 +157,7 @@ end
                   <td><%= json["flavor"].to_s %></td>
                   <td><%= json["infra_type"].to_s %></td>
                   <td><%= json["workers"].to_s %></td>
+                  <td>$<%= json["precio_subs"].to_s %> USD</td>
                   <td>$<%= json["precio"].to_s %> USD</td>
                   <td><%= json["region"].to_s %></td>
                 </tr>
@@ -197,7 +199,6 @@ end
                   <td><%= json["workers"].to_s %></td>
                   <td><div class="myDIV">$<%= json["precio_subs"].to_s %> USD</div></td>
                   <td><div class="myDIV">$<%= json["precio"].to_s %> USD</div></td>
-                  precio_subs
                 </tr>
               <% end %>
             </tbody>
