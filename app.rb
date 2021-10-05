@@ -12,8 +12,9 @@ get '/iks' do
   respuestasizing=[]
   respuestasizingalt=[]
   respuestaprecio=[]
+  params=[]
   response.set_cookie("llave", value: "valor")
-  erb :iks , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt, :respuestaprecio => respuestaprecio}
+  erb :iks , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt, :respuestaprecio => respuestaprecio, :params => params}
 end
 
 get '/menu' do
@@ -72,9 +73,10 @@ get '/ocp' do
   respuestasizing=[]
   respuestasizingalt=[]
   respuestaprecio=[]
+  params=[]
   apirespuesta=false
   response.set_cookie("llave", value: "valor")
-  erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt, :respuestaprecio => respuestaprecio, :apirespuesta => apirespuesta}
+  erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt, :respuestaprecio => respuestaprecio, :apirespuesta => apirespuesta, :params => params}
 end
 
 get '/ocp-respuesta' do

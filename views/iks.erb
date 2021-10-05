@@ -80,7 +80,7 @@ end
         </div>
         <div class="ibox-content">
           <form action="/iks-precio" method="get">
-            <table class="table table-stripped">
+            <table class="table table-stripped" id="data2">
               <thead>
                 <tr>
                   <th>Parámetro</th>
@@ -140,7 +140,7 @@ end
           <h5>Dimensionamiento Clúster con Worker Nodes</h5>
         </div>
         <div class="ibox-content">
-          <table class="table table-stripped">
+          <table class="table table-stripped" id="respuestaprecio">
             <thead>
               <tr>
                 <th>Flavor</th>
@@ -179,7 +179,7 @@ end
           <h5>Dimensionamiento Clúster más económico</h5>
         </div>
         <div class="ibox-content">
-          <table class="table table-stripped">
+          <table class="table table-stripped" id="respuestasizing">
             <thead>
               <tr>
                 <th>Flavor</th>
@@ -194,7 +194,7 @@ end
                   <td><%= json["flavor"].to_s %></td>
                   <td><%= json["infra_type"].to_s %></td>
                   <td><%= json["workers"].to_s %></td>
-                  <td><div class="myDIV">$<%= json["precio"].to_s %> USD</div></td>
+                  <td>$<%= json["precio"].to_s %> USD</td>
                 </tr>
               <% end %>
             </tbody>
@@ -216,7 +216,7 @@ end
           <h5>Alternativas del Dimensionamiento Clúster</h5>
         </div>
         <div class="ibox-content">
-          <table class="table table-stripped">
+          <table class="table table-stripped" id="respuestasizingalt">
             <thead>
               <tr>
                 <th>Flavor</th>
@@ -244,11 +244,21 @@ end
 <% end %>
 
 <div class="row">
-  <div class="col-12 text-center">
+  <div class="col-lg-6 text-center">
     <form action="/menu" method="get">
       <button type="submit" class="btn btn-outline btn-primary">Regresar</button>
     </form>
   </div>
+  <% if (respuestasizing != nil and respuestasizing.size>0 and respuestasizingalt != nil and respuestasizingalt.size>0)  then%>
+  <div class="col-lg-6 text-center">
+    <a class="btn btn-outline btn-primary" href="#" id="anchorNewApi-xlsx" onclick="return clusterExcel('xlsx');">Obtener Excel</a>
+  </div>
+  <% end %>
+  <% if (respuestaprecio != nil and respuestaprecio.size>0) then%>
+  <div class="col-lg-6 text-center">
+    <a class="btn btn-outline btn-primary" href="#" id="anchorNewApi-xlsx" onclick="return wnExcel('xlsx');">Obtener Excel</a>
+  </div>
+  <% end %>
 </div>
 
 <script>
@@ -269,4 +279,37 @@ end
       $("#cpu").val(res);
     });
   });
+
+  function clusterExcel(format) {
+    return ExcellentExport.convert({
+      anchor: 'anchorNewApi-' + format,
+      filename: 'dimensionamiento_iks',
+      format: format
+    }, [{
+        name: 'dimensionamiento',
+        from: {
+          table: 'respuestasizing'
+        }
+    },{
+        name: 'alternativas',
+        from: {
+          table: 'respuestasizingalt'
+        }
+      }
+    ]);
+  }
+
+  function wnExcel(format) {
+    return ExcellentExport.convert({
+      anchor: 'anchorNewApi-' + format,
+      filename: 'dimensionamiento_iks',
+      format: format
+    }, [{
+        name: 'dimensionamiento',
+        from: {
+          table: 'respuestaprecio'
+        }
+    }
+    ]);
+  }
 </script>
