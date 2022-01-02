@@ -29,7 +29,7 @@ get '/iks-respuesta' do
   logger = Logger.new(STDOUT)
   logger.info("Recibiendo parametros para dimensionamiento de IKS: CPU: #{cpu} RAM: #{ram} Infra_Type: #{infra_type} Region #{region}")
   @name = "IKS-Dimensionamiento"
-  urlapi="http://169.57.7.203:30778"
+  urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud"
   
   #parametros recibidos
   respuestasizing = RestClient.get "#{urlapi}/api/v1/ikssizingclusteroptimo?cpu=#{cpu}&ram=#{ram}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
@@ -53,7 +53,7 @@ get '/iks-precio' do
   logger = Logger.new(STDOUT)
   logger.info("Recibiendo parametros para dimensionamiento de IKS con Worker Nodes: Worker Nodes: #{wn} Flavor: #{flavor} Infra_Type: #{infra_type} Region: #{region}")
   @name = "CP4D-Dimensionamiento"
-  urlapi="http://169.57.7.203:30778"
+  urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud"
   
   respuestaprecio = RestClient.get "#{urlapi}/api/v1/ikspreciocluster?wn=#{wn}&flavor=#{flavor}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
   respuestaprecio=JSON.parse(respuestaprecio.to_s)
@@ -87,7 +87,7 @@ get '/ocp-respuesta' do
   logger = Logger.new(STDOUT)
   logger.info("Recibiendo parametros para dimensionamiento de OCP: CPU: #{cpu} RAM: #{ram} Infra_Type: #{infra_type} Region: #{region}")
   @name = "OCP-Dimensionamiento"
-  urlapi="http://169.57.7.203:30778"
+  urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud"
   #urlapi="localhost:8080/"
   
   #parametros recibidos
@@ -119,7 +119,7 @@ get '/ocp-precio' do
   logger = Logger.new(STDOUT)
   logger.info("Recibiendo parametros para dimensionamiento de IKS con Worker Nodes: Worker Nodes: #{wn} Flavor: #{flavor} Infra_Type: #{infra_type} Region #{region}")
   @name = "CP4D-Dimensionamiento"
-  urlapi="http://169.57.7.203:30778"
+  urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud"
   #urlapi="localhost:8080/"
   
   respuestaprecio = RestClient.get "#{urlapi}/api/v1/preciocluster?wn=#{wn}&flavor=#{flavor}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
