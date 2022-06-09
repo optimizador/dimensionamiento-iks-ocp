@@ -139,3 +139,79 @@ get '/ocp-precio' do
   erb :ocp , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt,:respuestaprecio => respuestaprecio, :apirespuesta => apirespuesta}
 end
 
+#################################################
+#Interfase para VPC
+#
+#################################################
+get '/ocp-vpc' do
+  logger = Logger.new(STDOUT)
+  logger.info(request)
+  @name = "OCP"
+  respuestasizing=[]
+  respuestasizingalt=[]
+  respuestaprecio=[]
+  params=[]
+  apirespuesta=false
+  response.set_cookie("llave", value: "valor")
+  erb :ocp_vpc , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt, :respuestaprecio => respuestaprecio, :apirespuesta => apirespuesta, :params => params}
+end
+
+get '/ocp-vpc-respuesta' do
+  cpu="#{params['cpu']}"
+  ram="#{params['ram']}"
+  infra_type="#{params['infra_type']}"
+  region="#{params['region']}"
+  logger = Logger.new(STDOUT)
+  logger.info("Recibiendo parametros para dimensionamiento de OCP: CPU: #{cpu} RAM: #{ram} Infra_Type: #{infra_type} Region: #{region}")
+  @name = "OCP-Dimensionamiento"
+  urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud"
+  #urlapi="localhost:8080/"
+  
+  #parametros recibidos
+  respuestasizing = RestClient.get "#{urlapi}/api/v2/sizingclusteroptimosubs_vpc?cpu=#{cpu}&ram=#{ram}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
+  respuestasizing=JSON.parse(respuestasizing.to_s)
+  logger.info(respuestasizing)
+  respuestasizingalt = RestClient.get "#{urlapi}/api/v2/sizingclustersubs_vpc?cpu=#{cpu}&ram=#{ram}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
+  respuestasizingalt=JSON.parse(respuestasizingalt.to_s)
+  logger.info(respuestasizingalt)
+
+  if(respuestasizing.empty? || respuestasizingalt.empty?)
+    apirespuesta = true
+  else 
+    apirespuesta = false
+  end
+
+  respuestaprecio=[]
+  
+
+  #erb :cp4d , :locals => {:respuestasizing => params[:respuestasizing]}
+  erb :ocp_vpc , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt, :respuestaprecio => respuestaprecio, :apirespuesta => apirespuesta}
+end
+
+get '/ocp-vpc-precio' do
+  wn="#{params['wn']}"
+  flavor="#{params['flavor_wn']}"
+  infra_type="#{params['infra_type_wn']}"
+  region="#{params['region']}"
+  logger = Logger.new(STDOUT)
+  logger.info("Recibiendo parametros para dimensionamiento de IKS con Worker Nodes: Worker Nodes: #{wn} Flavor: #{flavor} Infra_Type: #{infra_type} Region #{region}")
+  @name = "CP4D-Dimensionamiento"
+  urlapi="https://apis.9sxuen7c9q9.us-south.codeengine.appdomain.cloud"
+  #urlapi="localhost:8080/"
+  
+  respuestaprecio = RestClient.get "#{urlapi}/api/v2/preciocluster_vpc?wn=#{wn}&flavor=#{flavor}&infra_type=#{infra_type}&region=#{region}", {:params => {}}
+  respuestaprecio=JSON.parse(respuestaprecio.to_s)
+  logger.info(respuestaprecio)
+
+  if respuestaprecio.empty?
+    apirespuesta = true
+  else 
+    apirespuesta = false
+  end
+
+  respuestasizing=[]
+  respuestasizingalt=[]
+
+  #erb :cp4d , :locals => {:respuestasizing => params[:respuestasizing]}
+  erb :ocp_vpc , :locals => {:respuestasizing => respuestasizing,:respuestasizingalt => respuestasizingalt,:respuestaprecio => respuestaprecio, :apirespuesta => apirespuesta}
+end
