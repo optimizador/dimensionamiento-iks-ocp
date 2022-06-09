@@ -1,0 +1,349 @@
+<%def money(num)
+  "$#{num.gsub(/\d(?=(...)+$)/, '\0,')}"
+end
+%>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Parámetros clúster OCP</h5>
+        </div>
+        <div class="ibox-content">
+          <h5>NOTAS:*Los precios lista que se presentarán son calculados y pueden variar respecto a los presentados en IBM Cloud en +-1%</h5>
+          <form action="/ocp-respuesta" method="get">
+            <table class="table table-stripped">
+              <thead>
+                <tr>
+                  <th>Parámetro</th>
+                  <th>Valor</th>
+                  <th>Milicores a CPU</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>CPU</td>
+                  <td>
+                    <label for="cpu"><input type="number" id="cpu" name="cpu" step="any" required>
+                  </td>
+                  <td> Ingresa la cantidad de milicores:
+                </tr>
+                <tr>
+                  <td>RAM (GB)</td>
+                  <td>
+                    <label for="RAM (GB)"><input type="number" id="ram" name="ram" step="any" required>
+                  </td>
+                  <td>
+                    <input type="number" id="milicpu" name="milicpu" step="any">
+                    <button type="button" id="btn_calcular" class="btn btn-outline btn-primary">Calcular</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tipo de infraestructura</td>
+                  <td>
+                    <select name="infra_type" id="infra_type" required>
+                      <!-- option value="dedicated">Dedicado</option -->
+                      <option value="shared">Compartido</option>
+                      <!-- option value="bm">Bare Metal</option -->
+                    </select>
+                  </td>
+                  <td>
+                    Resultado: 
+                    <input type="number" id="rescpu" name="rescpu" disabled>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Región</td>
+                  <td>
+                    <select name="region" id="region" required>
+                      <!--option value="mexico">México</option -->
+                      <option value="dallas">Dallas</option>
+                      <option value="wdc">Washington</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button type="submit" class="btn btn-outline btn-primary">Quiero mi dimensionamiento</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Parámetros Clúster OCP con Worker Nodes</h5>
+        </div>
+        <div class="ibox-content">
+          <form action="/ocp-precio" method="get">
+            <table class="table table-stripped">
+              <thead>
+                <tr>
+                  <th>Parámetro</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Worker Nodes</td>
+                  <td>
+                    <label for="wn"><input type="number" id="wn" name="wn">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tipo de infraestructura</td>
+                  <td>
+                    <select name="infra_type_wn" id="infra_type_wn">
+                      <!-- option value="dedicated">Dedicado</option -->
+                      <option value="shared">Compartido</option>
+                      <!-- option value="bm">Bare Metal</option -->
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Flavor</td>
+                  <td>
+                    <select name="flavor_wn" id="flavor_wn">
+                      <option value="4x16">4x16</option>
+                      <option value="4x32">4x32</option>
+                      <option value="8x16">8x16</option>
+                      <option value="8x32">8x32</option>
+                      <option value="8x64">8x64</option>
+                      <option value="16x32">16x32</option>
+                      <option value="16x64">16x64</option>
+                      <option value="16x128">16x128</option>
+                      <option value="32x64">32x64</option>
+                      <option value="32x128">32x128</option>
+                      <option value="32x256">32x256</option>
+                      <option value="48x96">48x96</option>
+                      <option value="48x192">48x192</option>
+                      <option value="48x384">48x384</option>
+                      <option value="64x512">64x512</option>
+                      <option value="128x1024">128x1024</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Región</td>
+                  <td>
+                    <select name="region" id="region">
+                      <!--option value="mexico">México</option -->
+                      <option value="dallas">Dallas</option>
+                      <option value="wdc">Washington</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button type="submit" class="btn btn-outline btn-primary">Quiero mi dimensionamiento</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--%=respuestaprecio%-->
+<% if (respuestaprecio != nil and respuestaprecio.size>0) then%>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Dimensionamiento Clúster con Worker Nodes</h5>
+        </div>
+        <div class="ibox-content">
+          <table class="table table-stripped" id="respuestaprecio">
+            <thead>
+              <tr>
+                <th>Flavor</th>
+                <th>Tipo de Infraestructura</th>
+                <th>Workers</th>
+                <th>Precio Mensual (USD) con Subscripción OCP</th>
+                <th>Precio Mensual (USD) sin Subscripción OCP</th>
+                <th>Región</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% respuestaprecio.each do |json| %>
+                <tr>
+                  <td><%= json["flavor"].to_s %></td>
+                  <td><%= json["infra_type"].to_s %></td>
+                  <td><%= json["workers"].to_s %></td>
+                  <td>$<%= json["precio"].to_s %> USD</td>
+                  <td>$<%= json["precio_wo_subs"].to_s %> USD</td>
+                  <td><%= json["region"].to_s %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<!--%=respuestasizing%-->
+<% if (respuestasizing != nil and respuestasizing.size>0) then%>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Dimensionamiento Clúster más económico</h5>
+        </div>
+        <div class="ibox-content">
+          <table class="table table-stripped" id="respuestasizing">
+            <thead>
+              <tr>
+                <th>Flavor</th>
+                <th>Tipo de Infraestructura</th>
+                <th>Workers</th>
+                <th>Precio Mensual (USD) con Suscripción OCP</th>
+                <th>Precio Mensual (USD) sin Suscripción OCP</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% respuestasizing.each do |json| %>
+                <tr>
+                  <td><%= json["flavor"].to_s %></td>
+                  <td><%= json["infra_type"].to_s %></td>
+                  <td><%= json["workers"].to_s %></td>
+                  <td>$<%= json["precio_subs"].to_s %> USD</td>
+                  <td>$<%= json["precio"].to_s %> USD</td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<!--%=respuestasizingalt%-->
+<% if (respuestasizingalt != nil and respuestasizingalt.size>0) then%>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Alternativas del Dimensionamiento Clúster</h5>
+        </div>
+        <div class="ibox-content">
+          <table class="table table-stripped" id="respuestasizingalt">
+            <thead>
+              <tr>
+                <th>Flavor</th>
+                <th>Tipo de Infraestructura</th>
+                <th>Workers</th>
+                <th>Precio Mensual (USD) con Subscripción OCP</th>
+                <th>Precio Mensual (USD) sin Subscripción OCP</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% respuestasizingalt.each do |json| %>
+                <tr>
+                  <td><%= json["flavor"].to_s %></td>
+                  <td><%= json["infra_type"].to_s %></td>
+                  <td><%= json["workers"].to_s %></td>
+                  <td>$<%= json["precio_subs"].to_s %> USD</td>
+                  <td>$<%= json["precio"].to_s %> USD</td>
+                  
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<div class="row">
+  <div class="col-lg-6 text-center">
+    <form action="/menu" method="get">
+      <button type="submit" class="btn btn-outline btn-primary">Regresar</button>
+    </form>
+  </div>
+  <% if (respuestasizing != nil and respuestasizing.size>0 and respuestasizingalt != nil and respuestasizingalt.size>0)  then%>
+  <div class="col-lg-6 text-center">
+    <a class="btn btn-outline btn-primary" href="#" id="anchorNewApi-xlsx" onclick="return clusterExcel('xlsx');">Obtener Excel</a>
+  </div>
+  <% end %>
+  <% if (respuestaprecio != nil and respuestaprecio.size>0) then%>
+  <div class="col-lg-6 text-center">
+    <a class="btn btn-outline btn-primary" href="#" id="anchorNewApi-xlsx" onclick="return wnExcel('xlsx');">Obtener Excel</a>
+  </div>
+  <% end %>
+</div>
+
+<!--%=apirespuesta%-->
+<% if (apirespuesta == true) then%>
+    <script>
+      alert("La configuración de cpu y ram es incorrecta, pruebe con otra configuración")
+    </script>
+<% end %>
+
+<script>
+  $(document).ready(function () {
+    $("#infra_type_wn").change(function () {
+        var val = $(this).val();
+        if (val == "shared" || val == "dedicated") {
+            $("#flavor_wn").html("<option value='4x16'>4x16</option> <option value='4x32'>4x32</option> <option value='8x32'>8x32</option> <option value='16x16'>16x16</option> <option value='16x32'>16x32</option> <option value='16x64'>16x64</option> <option value='32x32'>32x32</option> <option value='32x64'>32x64</option> <option value='32x128'>32x128</option> <option value='32x128'>32x128</option> <option value='56x242'>56x242</option>");
+        } else {
+            $("#flavor_wn").html("<option value='me4c.4x32'>me4c.4x32</option> <option value='me4c.4x32.1.9tb.ssd'>me4c.4x32.1.9tb.ssd</option> <option value='mb4c.20x192'>mb4c.20x192</option> <option value='mb4c.20x384'>mb4c.20x384</option> <option value='mb4c.20x64'>mb4c.20x64</option> <option value='mb4c.20x64.2x1.9tb.ssd'>mb4c.20x64.2x1.9tb.ssd</option> <option value='mb4c.32x384.3.8tb.ssd'>mb4c.32x384.3.8tb.ssd</option> <option value='mb4c.32x384.6x3.8tb.ssd'>mb4c.32x384.6x3.8tb.ssd</option> <option value='mg4c.32x384.2xp100'>mg4c.32x384.2xp100</option> <option value='mb4c.32x768.3.8tb.ssd'>mb4c.32x768.3.8tb.ssd</option> <option value='mb4c.48x1536'>mb4c.48x1536</option>");
+        }
+    });
+
+    $("#btn_calcular").click(function(){
+      var num = $("#milicpu").val();
+      var res = num/1000;
+      $("#rescpu").val(res);
+      $("#cpu").val(res);
+    });
+});
+
+function clusterExcel(format) {
+    return ExcellentExport.convert({
+      anchor: 'anchorNewApi-' + format,
+      filename: 'dimensionamiento_ocp',
+      format: format
+    }, [{
+        name: 'dimensionamiento',
+        from: {
+          table: 'respuestasizing'
+        }
+    },{
+        name: 'alternativas',
+        from: {
+          table: 'respuestasizingalt'
+        }
+      }
+    ]);
+  }
+
+function wnExcel(format) {
+    return ExcellentExport.convert({
+      anchor: 'anchorNewApi-' + format,
+      filename: 'dimensionamiento_ocp',
+      format: format
+    }, [{
+        name: 'dimensionamiento',
+        from: {
+          table: 'respuestaprecio'
+        }
+    }
+    ]);
+  }
+</script>
+
